@@ -4,11 +4,11 @@ function HttpRequestLogger() {
 		observe: function(subject, topic, data) {
 			if (topic == "http-on-examine-response" || topic == "http-on-examine-cached-response") {
 				var httpChannel = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
-				var ref = httpChannel.referrer ? httpChannel.referrer.spec : "(none)";
-				var buffer = ref + "\t" + httpChannel.requestMethod + "\t" + httpChannel.URI.spec +
-					"\t" + httpChannel.requestSucceeded + "\t" + httpChannel.contentType + "\t" +
-					httpChannel.contentLength + "\n";
-				fos.write(buffer, buffer.length);
+				if (httpChannel.contentType == "application/json") {
+					var buffer = httpChannel.requestMethod + "\t" + httpChannel.requestSucceeded + 
+						"\t" + httpChannel.contentType + "\t" + httpChannel.contentLength + "\n";
+					fos.write(buffer, buffer.length);
+				}
 			}
 		}
 	};
